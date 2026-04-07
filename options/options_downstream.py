@@ -1,6 +1,6 @@
 root_path = "./data"
-root_path = "/data/wwj_bkup/UmURL0711/data/"
-root_path = "/data/wwj/UmURL0711/data/"
+# root_path = "/data/wwj_bkup/UmURL0711/data/"
+# root_path = "/data/wwj/UmURL0711/data/"
 
 
 

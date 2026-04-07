@@ -49,7 +49,7 @@ class Feeder(torch.utils.data.Dataset):
             self.semi = 1
         N = self.N
         print('origin ',self.data.shape,len(self.number_of_frames),len(self.label), self.semi)
-        print(f"Observe Ratio = {self.observe_ratio} , l_ratio = {self.l_ratio}")
+        print(f"Observe Ratio = {observe_ratio} , l_ratio = {self.l_ratio}")
 
         idx = np.arange(N)
         np.random.shuffle(idx)

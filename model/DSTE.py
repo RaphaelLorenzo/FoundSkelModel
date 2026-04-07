@@ -177,19 +177,19 @@ class DSTE(nn.Module):
         self.ske_emb = Skeleton_Emb(t_input_size, s_input_size, hidden_size)
         self.d_model  = hidden_size 
         self.tpe = PositionalEncoding(hidden_size) # sin/cos temporal positional encoding
-        self.spe = torch.nn.Parameter(torch.zeros(1, 34, hidden_size )) # learnable spatial positional encoding
+        self.spe = torch.nn.Parameter(torch.zeros(1, t_input_size//3, hidden_size )) # learnable spatial positional encoding
         trunc_normal_(self.spe, std=.02)
         alpha, beta, gap = alpha, 1 - alpha, gap
 
         attn_t = nn.MultiheadAttention(embed_dim=self.d_model, num_heads=num_head, dropout=0., batch_first=True)
         attn_s = nn.MultiheadAttention(embed_dim=self.d_model, num_heads=num_head, dropout=0., batch_first=True)
         self.t_tr = DST_Layer(seqlen=64, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_t, kernel_size=kernel_size)
-        self.s_tr = DST_Layer(seqlen=34, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_s, kernel_size=kernel_size)
+        self.s_tr = DST_Layer(seqlen=t_input_size//3, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_s, kernel_size=kernel_size)
               
         attn_t1 = nn.MultiheadAttention(embed_dim=self.d_model, num_heads=num_head, dropout=0., batch_first=True)
         attn_s1 = nn.MultiheadAttention(embed_dim=self.d_model, num_heads=num_head, dropout=0., batch_first=True)
         self.t_tr1 = DST_Layer(seqlen=64, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_t1, kernel_size=kernel_size)
-        self.s_tr1 = DST_Layer(seqlen=34, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_s1, kernel_size=kernel_size)
+        self.s_tr1 = DST_Layer(seqlen=t_input_size//3, dim=hidden_size, alpha=alpha, beta=beta, gap=gap, attn=attn_s1, kernel_size=kernel_size)
 
 
     def forward(self, jt, js):
