@@ -233,7 +233,7 @@ def main_worker(args):
         # remember best acc@1 and save checkpoint
         is_best = acc1 > best_acc1
         if is_best:
-            print("found new best accuracy:= ",acc1)
+            print("\nfound new best accuracy:= ",acc1)
             best_acc1 = max(acc1, best_acc1)
             #state_dict = {
             #            'epoch': epoch + 1,
@@ -241,6 +241,10 @@ def main_worker(args):
             #            'state_dict': model.state_dict(),
             #            #'optimizer' : optimizer.state_dict(),
             #        }
+            save_dir = os.path.dirname(args.pretrained)
+            save_path = os.path.join(save_dir, f"best_downstream_checkpoint_{args.finetune_dataset}_{args.protocol}_{args.moda}_{args.backbone}.pth.tar")
+            torch.save(model.state_dict(), save_path)
+            print(f"Saved best checkpoint to {save_path}")
             
         # sanity check 
         #if epoch == 0:
@@ -353,7 +357,7 @@ def validate(val_loader, model, criterion, args):
                 progress.display(i)
 
         # TODO: this should also be done with the ProgressMeter
-        print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+        print('\n EVALUATION: Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
               .format(top1=top1, top5=top5))
         
 
