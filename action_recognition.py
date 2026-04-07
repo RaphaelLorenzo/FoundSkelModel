@@ -15,6 +15,8 @@ import numpy as np
 from tqdm import tqdm
 from tools import AverageMeter, remove_prefix, sum_para_cnt
 
+import multiprocessing
+
 random.seed(0)
 np.random.seed(0)
 torch.manual_seed(0)
@@ -22,7 +24,6 @@ torch.manual_seed(0)
 from dataset import get_finetune_training_set,get_finetune_validation_set
 
 # python action_recognition.py --lr 0.03 --batch-size 512 --backbone STTR --moda joint --pretrained ./checkpoint/ntu60_xs_j_sttr/checkpoint_0450.pth.tar --finetune-dataset ntu60 --protocol cross_subject --padding zero --obeserve_ratio 0.9 --semi 1                                              
-
 global best_acc1
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 
@@ -57,6 +58,9 @@ parser.add_argument('--protocol', default='cross_view', type=str,
 
 parser.add_argument('--moda', default='joint', type=str,
                     help='joint, motion , bone')
+
+parser.add_argument('--num-workers', default=-1, type=int,
+                    help='number of workers, -1 means use all available cores')
 
 parser.add_argument('--backbone', default='DSTE', type=str,
                     help='DSTE or STTR')
@@ -100,6 +104,9 @@ def load_pretrained(args, model):
 
 def main():
     args = parser.parse_args()
+    if args.num_workers == -1:
+        args.num_workers = multiprocessing.cpu_count() - 1
+    print(f"Using {args.num_workers} workers")
     if not os.path.exists(args.pretrained):
         print(args.pretrained, ' not found!')
         exit(0)
@@ -193,7 +200,7 @@ def main_worker(args):
     trainloader_params = {
             'batch_size': args.batch_size,
             'shuffle': True,
-            'num_workers': 8,
+            'num_workers': args.num_workers,
             'pin_memory': True,
             'prefetch_factor': 4,
             'persistent_workers': True
@@ -201,7 +208,7 @@ def main_worker(args):
     valloader_params = {
             'batch_size': args.batch_size,
             'shuffle': False,
-            'num_workers': 8,
+            'num_workers': args.num_workers,
             'pin_memory': True,
             'prefetch_factor': 4,
             'persistent_workers': True
