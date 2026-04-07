@@ -60,12 +60,20 @@ class Feeder(torch.utils.data.Dataset):
             if file_name not in _split:
                 continue
             height, width = item['img_shape']
-            
+
+            ## seems like an issue ! keypoints shape is (1, T, 17, 2) so we should divide by height and widht on the last dimension !            
+            # keypoint = np.array(item['keypoint'])
+            # conf = np.array(item['keypoint_score'])
+            # keypoint[:, :, 0] /= height
+            # keypoint[:, :, 1] /= width
+
+            ## Fixed :
             keypoint = np.array(item['keypoint'])
             conf = np.array(item['keypoint_score'])
-            keypoint[:, :, 0] /= height
-            keypoint[:, :, 1] /= width
-
+            keypoint[:, :, :, 0] /= height
+            keypoint[:, :, :, 1] /= width
+            
+            
             conf = conf[:, :, :, np.newaxis]
             if padding == 'confidence':
                 motion = np.concatenate([keypoint, conf], axis=3)# M T V C
