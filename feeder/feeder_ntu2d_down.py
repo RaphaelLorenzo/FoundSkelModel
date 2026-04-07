@@ -61,17 +61,18 @@ class Feeder(torch.utils.data.Dataset):
                 continue
             height, width = item['img_shape']
 
-            ## seems like an issue ! keypoints shape is (1, T, 17, 2) so we should divide by height and widht on the last dimension !            
-            # keypoint = np.array(item['keypoint'])
-            # conf = np.array(item['keypoint_score'])
-            # keypoint[:, :, 0] /= height
-            # keypoint[:, :, 1] /= width
-
-            ## Fixed :
+            ## seems like an issue ! keypoints shape is (1, T, 17, 2) so we should divide by height and widht on the last dimension ! 
+            # keep it for now           
             keypoint = np.array(item['keypoint'])
             conf = np.array(item['keypoint_score'])
-            keypoint[:, :, :, 0] /= height
-            keypoint[:, :, :, 1] /= width
+            keypoint[:, :, 0] /= height
+            keypoint[:, :, 1] /= width
+
+            ## Possible fix :
+            # keypoint = np.array(item['keypoint'])
+            # conf = np.array(item['keypoint_score'])
+            # keypoint[:, :, :, 0] /= height
+            # keypoint[:, :, :, 1] /= width
             
             
             conf = conf[:, :, :, np.newaxis]
