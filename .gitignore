@@ -1,0 +1,6 @@
+.vscode/
+*.npy
+__pycache__
+data/
+*.tar
+*.pyc
