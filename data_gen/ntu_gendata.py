@@ -5,7 +5,7 @@ import sys
 from numpy.lib.format import open_memmap
 
 sys.path.extend(['../'])
-from preprocess import pre_normalization
+from preprocess.preprocess import pre_normalization
 
 # ntu 60
 training_subjects = [
@@ -115,7 +115,7 @@ def gendata(data_path, out_path, ignored_sample_path=None, benchmark='xview', pa
         ignored_samples = []
     sample_name = []
     sample_label = []
-    for filename in os.listdir(data_path):
+    for filename in tqdm(os.listdir(data_path), desc="Reading filenames"):
         if filename in ignored_samples:
             continue
         action_class = int(
@@ -158,8 +158,8 @@ def gendata(data_path, out_path, ignored_sample_path=None, benchmark='xview', pa
 
     fp = np.zeros((len(sample_label), 3, max_frame, num_joint, max_body_true), dtype=np.float32)
 
-    for i, s in enumerate(tqdm(sample_name)):
-        data = read_xyz(os.path.join(data_path, s), max_body=max_body_kinect, num_joint=num_joint)
+    for i, s in enumerate(tqdm(sample_name, desc="Reading data")):
+        data = read_xyz(os.path.join(data_path, s), max_body=max_body_kinect, num_joint=num_joint) # C, T, V, max_body_true
         fp[i, :, 0:data.shape[1], :, :] = data
         fl[i] = data.shape[1] # num_frame
     
@@ -179,17 +179,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='NTU-RGB-D Data Converter.')
     
     # parser = argparse.ArgumentParser(description='NTU-RGB-D Data Converter.')
-    # parser.add_argument('--data_path', default='../data/nturgbd_raw/nturgb+d_skeletons/')
-    # parser.add_argument('--ignored_sample_path',
-    #                     default='../data/nturgbd_raw/samples_with_missing_skeletons.txt')
-    # parser.add_argument('--out_folder', default='../data/NTU-RGB-D-60-AGCN/')
-    # benchmark = ['xsub', 'xview']
-
-    parser.add_argument('--data_path', default='../data/nturgbd_raw_120/nturgb+d_skeletons/')
+    parser.add_argument('--data_path', default="/home/raphael/Projects/github/infogcn2/data/nturgbd_raw/nturgb+d_skeletons/") # default='../data/nturgbd_raw/nturgb+d_skeletons/')
     parser.add_argument('--ignored_sample_path',
-                       default='../data/nturgbd_raw_120/samples_with_missing_skeletons.txt')
-    parser.add_argument('--out_folder', default='../data/NTU-RGB-D-120-AGCN/')
-    benchmark = ['xsub','xsetup', ]
+                        default='../data/nturgbd_raw/samples_with_missing_skeletons.txt')
+    parser.add_argument('--out_folder', default='../data/NTU-RGB-D-60-AGCN/')
+    benchmark = ['xsub', 'xview']
+
+    # parser.add_argument('--data_path', default='../data/nturgbd_raw_120/nturgb+d_skeletons/')
+    # parser.add_argument('--ignored_sample_path',
+    #                    default='../data/nturgbd_raw_120/samples_with_missing_skeletons.txt')
+    # parser.add_argument('--out_folder', default='../data/NTU-RGB-D-120-AGCN/')
+    # benchmark = ['xsub','xsetup', ]
 
     part = ['train', 'val']
     arg = parser.parse_args()

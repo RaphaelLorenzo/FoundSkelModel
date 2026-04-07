@@ -97,7 +97,7 @@ class  opts_ntu2d_60_cross_subject():
 
     # feeder
     self.train_feeder_args = {
-      "pkl_path": "/data/wwj/ntu60_hrnet.pkl",
+      "pkl_path": "/home/raphael/Projects/github/FoundSkelModel/data/NTU2D/ntu60_hrnet.pkl",
       "split":"train",
       "protocol": "xsub",
       "padding": padding,
@@ -106,7 +106,7 @@ class  opts_ntu2d_60_cross_subject():
     }
    
     self.test_feeder_args = {
-      "pkl_path": "/data/wwj/ntu60_hrnet.pkl",
+      "pkl_path": "/home/raphael/Projects/github/FoundSkelModel/data/NTU2D/ntu60_hrnet.pkl",
       "split":"val",
       "protocol": "xsub",
       "padding": padding,

@@ -4,3 +4,5 @@ __pycache__
 data/
 *.tar
 *.pyc
+options/__pycache__/
+feeder/__pycache__/augmentations.cpython-310.pyc

@@ -21,6 +21,8 @@ torch.manual_seed(0)
 # change for action recogniton
 from dataset import get_finetune_training_set,get_finetune_validation_set
 
+# python action_recognition.py --lr 0.03 --batch-size 512 --backbone STTR --moda joint --pretrained ./checkpoint/ntu60_xs_j_sttr/checkpoint_0450.pth.tar --finetune-dataset ntu60 --protocol cross_subject --padding zero --obeserve_ratio 0.9 --semi 1                                              
+
 global best_acc1
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 
