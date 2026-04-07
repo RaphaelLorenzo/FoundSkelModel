@@ -176,8 +176,8 @@ class DSTE(nn.Module):
         # skeleton embedding
         self.ske_emb = Skeleton_Emb(t_input_size, s_input_size, hidden_size)
         self.d_model  = hidden_size 
-        self.tpe = PositionalEncoding(hidden_size)
-        self.spe = torch.nn.Parameter(torch.zeros(1, 34, hidden_size ))
+        self.tpe = PositionalEncoding(hidden_size) # sin/cos temporal positional encoding
+        self.spe = torch.nn.Parameter(torch.zeros(1, 34, hidden_size )) # learnable spatial positional encoding
         trunc_normal_(self.spe, std=.02)
         alpha, beta, gap = alpha, 1 - alpha, gap
 
@@ -307,18 +307,30 @@ class Downstream(nn.Module):
         self.d_model  = 2*hidden_size
         self.backbone = DSTE(t_input_size, s_input_size, hidden_size, num_head, num_layer, alpha=alpha, gap=gap, kernel_size=kernel_size)
         self.fc = nn.Linear(self.d_model, num_class)
+        
     def forward(self, jt, js, bt, bs, mt, ms, knn_eval=False, detect=False):
+        
+        # jt : (B, 64, 102)
+        # js : (B, 34, 192)
+        
         if self.modality == 'joint':
             y_t, y_s = self.backbone(jt, js)
+            # y_t : (B, 64, 1024) ie (B, T, D) i.e (B, T, 1024) one embedding per frame for both views
+            # y_s : (B, 34, 1024) ie (B, M*V, D) i.e (B, 34, 1024), one embedding per joint per view
+            
         elif self.modality == 'motion':
             y_t, y_s = self.backbone(mt, ms)
         elif self.modality == 'bone':
             y_t, y_s = self.backbone(bt, bs)
+            
         if detect == True: 
             y_s = F.adaptive_avg_pool1d(y_s.permute(0, 2, 1), 64).permute(0, 2, 1)
             y_i = torch.cat([y_t, y_s], dim=-1)
             return y_i
-        y_t, y_s = y_t.amax(dim=1), y_s.amax(dim=1)
+        
+        y_t, y_s = y_t.amax(dim=1), y_s.amax(dim=1) # (B, D) ie (B, 1024) one embedding per sample, achieved by max pooling over the time or the "spatial" dimension
+        # print(f"y_t.shape : {y_t.shape}, y_s.shape : {y_s.shape}") 
+        
         y_i = torch.cat([y_t, y_s], dim=-1)
         if knn_eval == True:
             return y_i

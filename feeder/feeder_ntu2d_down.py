@@ -96,16 +96,21 @@ class Feeder(torch.utils.data.Dataset):
         number_of_frames = self.number_of_frames[index]
         label = self.label[index]
 
+        # print(f"before crop data_numpy.shape : {data_numpy.shape}") # (3, number_of_frames, 17, 2) ie C, T, V, M
         # crop a sub-sequnce 
         data_numpy = augmentations.crop_subsequence(data_numpy, number_of_frames, self.l_ratio, self.input_size)
+        # print(f"after crop data_numpy.shape : {data_numpy.shape}") # (3, input_size, 17, 2) ie C, T, V, M
+
+        # print(f"number_of_frames : {number_of_frames} | input_size : {self.input_size} | l_ratio : {self.l_ratio}")
 
         # return data_numpy, label
-          
+
         # joint representation
-        jt = data_numpy.transpose(1,3,2,0)
-        jt = jt.reshape(self.input_size,self.M*self.V*self.C).astype('float32')
-        js = data_numpy.transpose(3,2,1,0)
-        js = js.reshape(self.M*self.V, self.input_size*self.C).astype('float32')
+        jt = data_numpy.transpose(1,3,2,0) # T, M, V, C
+        jt = jt.reshape(self.input_size,self.M*self.V*self.C).astype('float32') # (T, M*V*C) i.e (64, 102)
+        js = data_numpy.transpose(3,2,1,0) # M, V, T, C
+        js = js.reshape(self.M*self.V, self.input_size*self.C).astype('float32') # (M*V, T*C) i.e (34, 192)
+        
         # bone representation
         bone = np.zeros_like(data_numpy)
         for v1,v2 in self.Bone:

@@ -12,7 +12,7 @@ import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
 import numpy as np
-
+from tqdm import tqdm
 from tools import AverageMeter, remove_prefix, sum_para_cnt
 
 random.seed(0)
@@ -170,9 +170,12 @@ def main_worker(args):
 
     # optimize only the linear classifier
     parameters = list(filter(lambda p: p.requires_grad, model.parameters()))
- 
-    #if args.pretrained:
-    #    assert len(parameters) == 2  # fc.weight, fc.bias
+    
+    trainable_params = 0
+    for param in parameters:
+        trainable_params += param.numel()
+    
+    print(f"Trainable parameters: {trainable_params}")
         
     optimizer = torch.optim.SGD(parameters, args.lr,
                                 momentum=args.momentum,
@@ -261,7 +264,17 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
     model.train()
     
     end = time.time()
-    for i, (jt, js, bt, bs, mt, ms, target) in enumerate(train_loader):
+    for i, (jt, js, bt, bs, mt, ms, target) in tqdm(enumerate(train_loader), total=len(train_loader)):
+        
+        # print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+        # print(f"js.shape : {js.shape}") # (B, 34, 192) ie (B, M*V, T*C)
+        # print(f"bt.shape : {bt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+        # print(f"bs.shape : {bs.shape}") # (B, 34, 192) ie (B, M*V, T*C)
+        # print(f"mt.shape : {mt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+        # print(f"ms.shape : {ms.shape}") # (B, 34, 192) ie (B, M*V, T*C)
+        # print(f"target.shape : {target.shape}") # (B,)
+        # exit(0)
+        
         # measure data loading time
         data_time.update(time.time() - end)
         jt = jt.float().cuda(non_blocking=True)
@@ -308,7 +321,7 @@ def validate(val_loader, model, criterion, args):
     model.eval()
     with torch.no_grad():
         end = time.time()
-        for i, (jt, js, bt, bs, mt, ms, target) in enumerate(val_loader):            
+        for i, (jt, js, bt, bs, mt, ms, target) in tqdm(enumerate(val_loader), total=len(val_loader)):            
             jt = jt.float().cuda(non_blocking=True)
             js = js.float().cuda(non_blocking=True)
             bt = bt.float().cuda(non_blocking=True)
