@@ -52,14 +52,21 @@ class Feeder(torch.utils.data.Dataset):
         print(f"Observe Ratio = {observe_ratio} , l_ratio = {self.l_ratio}")
 
         idx = np.arange(N)
+        print(f"idx.shape : {idx.shape}")
         np.random.shuffle(idx)
+        print(f"idx.shape : {idx.shape}")
         #np.random.shuffle(idx)
         N_used = int(N * self.semi)
+        print(f"N_used : {N_used}")
         idx_used = idx[: N_used]
+        print(f"idx_used.shape : {idx_used.shape}")
         self.data = self.data[idx_used]
+        print(f"self.data.shape : {self.data.shape}")
         self.label = np.array(self.label)[idx_used]
+        print(f"self.label.shape : {self.label.shape}")
         self.number_of_frames = self.number_of_frames[idx_used]
         print('used ', self.data.shape,len(self.number_of_frames),len(self.label))
+        
         self.observe_ratio = observe_ratio
     def load_data(self, mmap):
         # data: N C V T M
