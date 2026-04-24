@@ -109,6 +109,7 @@ class Feeder(torch.utils.data.Dataset):
         data_numpy = np.array(self.data[index])
         # number_of_frames = self.number_of_frames[index]
         number_of_frames = max(3,(self.number_of_frames[index] * self.observe_ratio) // 1)
+        number_of_frames = int(number_of_frames)
         label = self.label[index]
 
         # crop a sub-sequnce 
