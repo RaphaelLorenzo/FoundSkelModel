@@ -72,7 +72,7 @@ class Feeder(torch.utils.data.Dataset):
         else:
             self.data = self.data
             self.label = np.array(self.label)
-            self.number_of_frames = self.number_frames
+            self.number_of_frames = self.number_of_frames
             
         self.observe_ratio = observe_ratio
     def load_data(self, mmap):
