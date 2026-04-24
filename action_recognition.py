@@ -23,7 +23,11 @@ torch.manual_seed(0)
 # change for action recogniton
 from dataset import get_finetune_training_set,get_finetune_validation_set
 
-# python action_recognition.py --lr 0.03 --batch-size 512 --backbone STTR --moda joint --pretrained ./checkpoint/ntu60_xs_j_sttr/checkpoint_0450.pth.tar --finetune-dataset ntu60 --protocol cross_subject --padding zero --obeserve_ratio 0.9 --semi 1                                              
+# python action_recognition.py --lr 0.03 --batch-size 512 --backbone DSTE --moda joint --pretrained ./checkpoint/ntu60_xs_joint_dste.pth --finetune-dataset ntu60 --protocol cross_subject --observe_ratio 0.4
+# result ??
+
+    
+# python action_recognition.py --lr 0.03 --batch-size 512 --backbone STTR --moda joint --pretrained ./checkpoint/ntu60_xs_j_sttr/checkpoint_0450.pth.tar --finetune-dataset ntu60 --protocol cross_subject --padding zero --observe_ratio 0.9 --semi 1                                             
 global best_acc1
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 
@@ -71,6 +75,9 @@ parser.add_argument('--padding', default='DSTE', type=str,
 
 parser.add_argument('--ver', default='DSTE', type=str,
                     help='DSTE or STTR')
+
+parser.add_argument('--observe_ratio', default=1.0, type=float, 
+                    help='obeserve_ratio')
 
 
 best_acc1 = 0
@@ -124,13 +131,13 @@ def main_worker(args):
     if args.finetune_dataset == 'pku_v2' and args.protocol == 'cross_subject':
         opts = options.opts_pku_v2_xsub()
     elif args.finetune_dataset== 'ntu60' and args.protocol == 'cross_view':
-        opts = options.opts_ntu_60_cross_view()
+        opts = options.opts_ntu_60_cross_view(observe_ratio=args.observe_ratio)
     elif args.finetune_dataset== 'ntu60' and args.protocol == 'cross_subject':
-        opts = options.opts_ntu_60_cross_subject()
+        opts = options.opts_ntu_60_cross_subject(observe_ratio=args.observe_ratio)
     elif args.finetune_dataset== 'ntu120' and args.protocol == 'cross_setup':
-        opts = options.opts_ntu_120_cross_setup()
+        opts = options.opts_ntu_120_cross_setup(observe_ratio=args.observe_ratio)
     elif args.finetune_dataset== 'ntu120' and args.protocol == 'cross_subject':
-        opts = options.opts_ntu_120_cross_subject()
+        opts = options.opts_ntu_120_cross_subject(observe_ratio=args.observe_ratio)
     elif args.finetune_dataset== 'uav' and args.protocol == 'cross_subject':
         opts = options.opts_uav_cross_subject(ver=args.ver)
     elif args.finetune_dataset== 'ntu60_2d' and args.protocol == 'cross_subject':
