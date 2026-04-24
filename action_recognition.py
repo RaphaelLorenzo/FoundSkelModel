@@ -23,7 +23,7 @@ torch.manual_seed(0)
 # change for action recogniton
 from dataset import get_finetune_training_set,get_finetune_validation_set
 
-# python action_recognition.py --lr 0.03 --batch-size 512 --backbone DSTE --moda joint --pretrained ./checkpoint/ntu60_xs_joint_dste.pth --finetune-dataset ntu60 --protocol cross_subject --observe_ratio 0.4
+# python action_recognition.py --lr 0.03 --batch-size 512 --backbone DSTE --moda joint --pretrained ./checkpoints/ntu60_xs_joint_dste.pth --finetune-dataset ntu60 --protocol cross_subject --observe_ratio 0.4
 # result ??
 
     
