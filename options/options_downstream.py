@@ -215,7 +215,7 @@ class opts_pku_v2_xsub():
 
 
 class  opts_ntu_60_cross_view():
-  def __init__(self, observe_ratio=1.0):
+  def __init__(self, observe_ratio=1.0, semi=1.0):
     self.name = 'ntu60Xview'
     # Sequence based model
     self.encoder_args = {
@@ -237,6 +237,7 @@ class  opts_ntu_60_cross_view():
       'num_frame_path': root_path + "/NTU-RGB-D-60-AGCN/xview/train_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': semi,
       'input_size': 64
     }
    
@@ -246,12 +247,13 @@ class  opts_ntu_60_cross_view():
       'num_frame_path': root_path + "/NTU-RGB-D-60-AGCN/xview/val_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': 1.0,
       'input_size': 64
     }
 
 class  opts_ntu_60_cross_subject():
 
-  def __init__(self, observe_ratio=1.0):
+  def __init__(self, observe_ratio=1.0, semi=1.0):
     self.name='ntu60Xsub'
     # Sequence based model
     self.encoder_args = {
@@ -273,6 +275,7 @@ class  opts_ntu_60_cross_subject():
       'num_frame_path': root_path + "/NTU-RGB-D-60-AGCN/xsub/train_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': semi,
       'input_size': 64
     }
    
@@ -282,13 +285,14 @@ class  opts_ntu_60_cross_subject():
       'num_frame_path': root_path + "/NTU-RGB-D-60-AGCN/xsub/val_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': 1.0,
       'input_size': 64
     }
 
 
 
 class  opts_ntu_120_cross_subject():
-  def __init__(self, observe_ratio=1.0):
+  def __init__(self, observe_ratio=1.0, semi=1.0):
     self.name='ntu120Xsub'
     # Sequence based model
     self.encoder_args = {
@@ -310,6 +314,7 @@ class  opts_ntu_120_cross_subject():
       'num_frame_path': root_path + "/NTU-RGB-D-120-AGCN/xsub/train_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': semi,
       'input_size': 64
     }
    
@@ -320,12 +325,13 @@ class  opts_ntu_120_cross_subject():
       'num_frame_path': root_path + "/NTU-RGB-D-120-AGCN/xsub/val_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': 1.0,
       'input_size': 64
     }
 
 class  opts_ntu_120_cross_setup():
 
-  def __init__(self, observe_ratio=1.0):
+  def __init__(self, observe_ratio=1.0, semi=1.0):
     self.name='ntu120Xset'
     # Sequence based model
     self.encoder_args = {
@@ -347,6 +353,7 @@ class  opts_ntu_120_cross_setup():
       'num_frame_path': root_path + "/NTU-RGB-D-120-AGCN/xsetup/train_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': semi,
       'input_size': 64
     }
    
@@ -357,5 +364,6 @@ class  opts_ntu_120_cross_setup():
       'num_frame_path': root_path + "/NTU-RGB-D-120-AGCN/xsetup/val_num_frame.npy",
       'l_ratio': [1.0],
       'observe_ratio': observe_ratio,
+      'semi': 1.0,
       'input_size': 64
     }

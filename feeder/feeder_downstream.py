@@ -26,7 +26,9 @@ class Feeder(torch.utils.data.Dataset):
                  num_frame_path,
                  l_ratio,
                  input_size,
-                 mmap=True,observe_ratio=1):
+                 mmap=True,
+                 observe_ratio=1,
+                 semi=1):
 
         self.data_path = data_path
         self.label_path = label_path
@@ -43,10 +45,12 @@ class Feeder(torch.utils.data.Dataset):
         self.Bone = [(1, 2), (2, 21), (3, 21), (4, 3), (5, 21), (6, 5), (7, 6), (8, 7), (9, 21),
                      (10, 9), (11, 10), (12, 11), (13, 1), (14, 13), (15, 14), (16, 15), (17, 1),
                      (18, 17), (19, 18), (20, 19), (21, 21), (22, 23), (23, 8), (24, 25), (25, 12)]
+        
         if 'train' in data_path:
-            self.semi = 1
+            self.semi = semi
         else:
             self.semi = 1
+            
         N = self.N
         print('origin ',self.data.shape,len(self.number_of_frames),len(self.label), self.semi)
         print(f"Observe Ratio = {observe_ratio} , l_ratio = {self.l_ratio}")
