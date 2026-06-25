@@ -210,28 +210,28 @@ def main_worker(args):
     print("TRAIN DATASET LENGTH : ", len(train_dataset))
     trdata0 = train_dataset[0]
     jt, js, bt, bs, mt, ms, target = trdata0
-    print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
-    print(f"jt.mean() : {jt.mean()}")
+    # print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+    # print(f"jt.mean() : {jt.mean()}")
     trjtmeans = []
     for i in range(len(train_dataset)):
         jt, js, bt, bs, mt, ms, target = train_dataset[i]
         trjtmeans.append(jt.mean())
-    print(f"trjtmeans.mean() : {np.mean(trjtmeans)}")
-    print(f"trjtmeans.std() : {np.std(trjtmeans)}")
+    # print(f"trjtmeans.mean() : {np.mean(trjtmeans)}")
+    # print(f"trjtmeans.std() : {np.std(trjtmeans)}")
     # trjtmeans.mean() : -0.07175243645906448
     # trjtmeans.std() : 0.08364752680063248
     
-    print("VAL DATASET LENGTH : ", len(val_dataset))
+    # print("VAL DATASET LENGTH : ", len(val_dataset))
     valdata0 = val_dataset[0]
     jt, js, bt, bs, mt, ms, target = valdata0
-    print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
-    print(f"jt.mean() : {jt.mean()}")
+    # print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+    # print(f"jt.mean() : {jt.mean()}")
     valjtmeans = []
     for i in range(len(val_dataset)):
         jt, js, bt, bs, mt, ms, target = val_dataset[i]
         valjtmeans.append(jt.mean())
-    print(f"valjtmeans.mean() : {np.mean(valjtmeans)}")
-    print(f"valjtmeans.std() : {np.std(valjtmeans)}")
+    # print(f"valjtmeans.mean() : {np.mean(valjtmeans)}")
+    # print(f"valjtmeans.std() : {np.std(valjtmeans)}")
     
     trainloader_params = {
             'batch_size': args.batch_size,
@@ -322,8 +322,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         # print(f"target.shape : {target.shape}") # (B,)
         # exit(0)
         
-        print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
-        print(f"jt.mean() : {jt.mean()}") # -0.06789635866880417
+        # print(f"jt.shape : {jt.shape}") # (B, 64, 102) ie (B, T, M*V*C)
+        # print(f"jt.mean() : {jt.mean()}") # -0.06789635866880417
         
         # measure data loading time
         data_time.update(time.time() - end)
